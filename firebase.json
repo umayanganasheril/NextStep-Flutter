@@ -1,0 +1,55 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "nextstep-us-2026",
+          "appId": "1:707413609534:android:67bb35819be0cfad9a156f",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "nextstep-us-2026",
+          "appId": "1:707413609534:ios:f00b1c532ddad6fc9a156f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "nextstep-us-2026",
+          "appId": "1:707413609534:ios:f00b1c532ddad6fc9a156f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "nextstep-us-2026",
+          "configurations": {
+            "android": "1:707413609534:android:67bb35819be0cfad9a156f",
+            "ios": "1:707413609534:ios:f00b1c532ddad6fc9a156f",
+            "macos": "1:707413609534:ios:f00b1c532ddad6fc9a156f",
+            "web": "1:707413609534:web:68ef9d8d2178b73f9a156f",
+            "windows": "1:707413609534:web:7597dc885d33c46a9a156f"
+          }
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
