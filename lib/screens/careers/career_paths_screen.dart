@@ -571,7 +571,7 @@ class _CareerPathsScreenState extends State<CareerPathsScreen> {
               ),
             ],
           ),
-        );
+        );   
       },
     );
   }
