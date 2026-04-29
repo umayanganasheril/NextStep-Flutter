@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class UserModel {
   final String uid;
   final String displayName;
@@ -12,9 +14,13 @@ class UserModel {
   final String? yearOfStudy;
   final String? cvText;
   final String? cvUrl;
+  final String? cvFileName;
+  final DateTime? cvUploadDate;
+  final int? cvFileSize;
+  final String? aiEvaluationSummary;
   final List<Map<String, dynamic>>? aiSuggestions;
-  final int? aiEvaluationScore;
-  int? get cvScore => aiEvaluationScore;
+  final List<Map<String, dynamic>>? aiCareerPaths;
+  final double? aiEvaluationScore;
   final List<Map<String, dynamic>>? aiRecommendedInternships;
 
   UserModel({
@@ -31,10 +37,37 @@ class UserModel {
     this.yearOfStudy,
     this.cvText,
     this.cvUrl,
+    this.cvFileName,
+    this.cvUploadDate,
+    this.cvFileSize,
+    this.aiEvaluationSummary,
     this.aiSuggestions,
+    this.aiCareerPaths,
     this.aiEvaluationScore,
     this.aiRecommendedInternships,
   });
+
+  int? get cvScore => aiEvaluationScore?.round();
+
+  double calculateEvaluationScore() {
+    return aiEvaluationScore ?? 0.0;
+  }
+
+  String getScoreLabel() {
+    final score = calculateEvaluationScore();
+    if (score >= 8.0) return 'EXCELLENT';
+    if (score >= 6.0) return 'GOOD';
+    if (score >= 4.0) return 'AVERAGE';
+    return 'WEAK';
+  }
+
+  dynamic getScoreColor() {
+    final score = calculateEvaluationScore();
+    if (score >= 8.0) return const Color(0xFF10B981);
+    if (score >= 6.0) return const Color(0xFF3B82F6);
+    if (score >= 4.0) return const Color(0xFFF59E0B);
+    return const Color(0xFFEF4444);
+  }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
@@ -51,8 +84,13 @@ class UserModel {
       yearOfStudy: map['yearOfStudy'],
       cvText: map['cvText'],
       cvUrl: map['cvUrl'],
+      cvFileName: map['cvFileName'],
+      cvUploadDate: map['cvUploadDate'] != null ? DateTime.tryParse(map['cvUploadDate']) : null,
+      cvFileSize: map['cvFileSize'],
+      aiEvaluationSummary: map['aiEvaluationSummary'],
       aiSuggestions: (map['aiSuggestions'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList(),
-      aiEvaluationScore: map['aiEvaluationScore'],
+      aiCareerPaths: (map['aiCareerPaths'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList(),
+      aiEvaluationScore: (map['aiEvaluationScore'] as num?)?.toDouble(),
       aiRecommendedInternships: (map['aiRecommendedInternships'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList(),
     );
   }
@@ -72,7 +110,12 @@ class UserModel {
       'yearOfStudy': yearOfStudy,
       'cvText': cvText,
       'cvUrl': cvUrl,
+      'cvFileName': cvFileName,
+      'cvUploadDate': cvUploadDate?.toIso8601String(),
+      'cvFileSize': cvFileSize,
+      'aiEvaluationSummary': aiEvaluationSummary,
       'aiSuggestions': aiSuggestions,
+      'aiCareerPaths': aiCareerPaths,
       'aiEvaluationScore': aiEvaluationScore,
       'aiRecommendedInternships': aiRecommendedInternships,
     };
@@ -92,8 +135,13 @@ class UserModel {
     String? yearOfStudy,
     String? cvText,
     String? cvUrl,
+    String? cvFileName,
+    DateTime? cvUploadDate,
+    int? cvFileSize,
+    String? aiEvaluationSummary,
     List<Map<String, dynamic>>? aiSuggestions,
-    int? aiEvaluationScore,
+    List<Map<String, dynamic>>? aiCareerPaths,
+    double? aiEvaluationScore,
     List<Map<String, dynamic>>? aiRecommendedInternships,
   }) {
     return UserModel(
@@ -110,7 +158,12 @@ class UserModel {
       yearOfStudy: yearOfStudy ?? this.yearOfStudy,
       cvText: cvText ?? this.cvText,
       cvUrl: cvUrl ?? this.cvUrl,
+      cvFileName: cvFileName ?? this.cvFileName,
+      cvUploadDate: cvUploadDate ?? this.cvUploadDate,
+      cvFileSize: cvFileSize ?? this.cvFileSize,
+      aiEvaluationSummary: aiEvaluationSummary ?? this.aiEvaluationSummary,
       aiSuggestions: aiSuggestions ?? this.aiSuggestions,
+      aiCareerPaths: aiCareerPaths ?? this.aiCareerPaths,
       aiEvaluationScore: aiEvaluationScore ?? this.aiEvaluationScore,
       aiRecommendedInternships: aiRecommendedInternships ?? this.aiRecommendedInternships,
     );

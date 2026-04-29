@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = auth.user;
     final name = user?.displayName ?? 'Student';
     final firstName = name.split(' ').first;
-    final cvPercent = user?.aiEvaluationScore ?? 0;
+    final cvPercent = (user?.aiEvaluationScore ?? 0).round();
     final userSkills = user?.technicalSkills ?? [];
     final recommended = internshipProvider.getRecommended(userSkills);
 
