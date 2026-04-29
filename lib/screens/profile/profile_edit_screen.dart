@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/profile_input_field.dart';
 import '../../services/storage_service.dart';
+import '../../services/profile_service.dart';
+import '../../providers/auth_provider.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -21,6 +23,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   File? _imageFile;
   final _picker = ImagePicker();
   final _storageService = StorageService();
+  final _profileService = ProfileService();
 
   @override
   void initState() {
@@ -48,17 +51,38 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
     setState(() => _isSaving = true);
     
+    final auth = context.read<AuthProvider>();
+    final user = auth.user;
+    if (user == null) return;
+
     String? imageUrl;
     if (_imageFile != null) {
-      imageUrl = await _storageService.uploadProfilePicture(_imageFile!, 'temp_uid');
+      imageUrl = await _storageService.uploadProfilePicture(_imageFile!, user.uid);
     }
 
-    await Future.delayed(const Duration(seconds: 1)); // Simulate save
-    if (mounted) {
-      setState(() => _isSaving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(imageUrl != null ? 'Profile updated with new photo' : 'Profile updated successfully')),
-      );
+    final updatedUser = user.copyWith(
+      name: _nameController.text,
+      bio: _bioController.text,
+      profilePictureUrl: imageUrl ?? user.profilePictureUrl,
+    );
+
+    try {
+      await _profileService.updateProfile(updatedUser);
+      auth.updateUser(updatedUser);
+      
+      if (mounted) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile synced with cloud successfully')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to sync profile')),
+        );
+      }
     }
   }
 
