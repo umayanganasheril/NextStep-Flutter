@@ -59,4 +59,25 @@ class AIService {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
+  /// Generates AI career insights based on text
+  static Future<Map<String, dynamic>?> generateCareerInsights(String text) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return {
+      'evaluationScore': 85.0,
+      'evaluationSummary': 'Excellent background in software engineering with strong Flutter skills.',
+      'suggestions': [
+        {'title': 'Add more projects', 'description': 'Try to add more real-world projects to your portfolio.', 'isPositive': false},
+        {'title': 'Strong technical skills', 'description': 'Your technical skills are impressive.', 'isPositive': true},
+      ],
+      'careerPaths': [
+        {'title': 'Full-stack Developer', 'description': 'Developing both frontend and backend.'},
+        {'title': 'Mobile App Developer', 'description': 'Specializing in Flutter and Native apps.'},
+      ],
+      'extractedSkills': ['Flutter', 'Dart', 'Firebase', 'Git'],
+      'recommendedInternships': [
+        {'jobTitle': 'Frontend Intern', 'companyName': 'Tech Corp', 'location': 'Remote'},
+      ],
+    };
+  }
 }

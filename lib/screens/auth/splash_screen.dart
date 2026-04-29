@@ -4,7 +4,7 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/auth_background.dart';
 import '../../widgets/logo_widget.dart';
 import '../navigation/main_navigation.dart';
-import '../profile/profile_setup_screen.dart';
+import 'profile_setup_screen.dart';
 import 'welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
+          MaterialPageRoute(builder: (_) => ProfileSetupScreen()),
         );
       }
     } else {

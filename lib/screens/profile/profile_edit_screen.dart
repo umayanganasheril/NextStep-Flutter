@@ -8,6 +8,7 @@ import '../../widgets/profile_input_field.dart';
 import '../../services/storage_service.dart';
 import '../../services/user_service.dart';
 import '../../providers/auth_provider.dart';
+import '../../models/user_model.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -129,7 +130,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 backgroundImage: _imageFile != null 
                                     ? FileImage(_imageFile!) 
                                     : (snapshot.data?.photoURL != null 
-                                        ? NetworkImage(snapshot.data!.photoURL) 
+                                        ? NetworkImage(snapshot.data!.photoURL!) 
                                         : null) as ImageProvider?,
                                 child: (_imageFile == null && snapshot.data?.photoURL == null) 
                                     ? const Icon(Icons.person_rounded, size: 50, color: AppTheme.textSecondary) 

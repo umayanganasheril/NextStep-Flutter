@@ -5,7 +5,7 @@ import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import 'sign_up_screen.dart';
 import '../navigation/main_navigation.dart';
-import '../profile/profile_setup_screen.dart';
+import 'profile_setup_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

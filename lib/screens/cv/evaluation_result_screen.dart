@@ -6,6 +6,7 @@ import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/career_path_model.dart';
 import '../../services/ai_service.dart';
+import '../../models/user_model.dart';
 import 'cv_upload_screen.dart';
 class EvaluationResultScreen extends StatefulWidget {
   const EvaluationResultScreen({super.key});
