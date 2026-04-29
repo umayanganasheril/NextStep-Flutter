@@ -31,4 +31,13 @@ class UserService {
       return null;
     }
   }
+
+  /// Real-time stream of user profile data
+  Stream<UserModel?> getUserProfileStream(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map((doc) => doc.exists && doc.data() != null ? UserModel.fromMap(doc.data()!) : null);
+  }
 }
