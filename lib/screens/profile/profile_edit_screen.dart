@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
+import '../../widgets/profile_input_field.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -82,46 +83,18 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Full Name',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                ProfileInputField(
+                  label: 'Full Name',
                   controller: _nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  hintText: 'Enter your name',
                   validator: (val) => val == null || val.isEmpty ? 'Please enter your name' : null,
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  'Bio',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                ProfileInputField(
+                  label: 'Bio',
                   controller: _bioController,
                   maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Tell us about yourself',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  hintText: 'Tell us about yourself',
                   validator: (val) => val != null && val.length > 100 ? 'Bio is too long' : null,
                 ),
               ],
