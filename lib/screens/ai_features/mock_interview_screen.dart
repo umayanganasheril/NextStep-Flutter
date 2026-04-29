@@ -2,6 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
+import '../../services/ai_service.dart';
+import '../../providers/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'evaluation_result_screen.dart';
 
 class MockInterviewScreen extends StatefulWidget {
   const MockInterviewScreen({super.key});
@@ -15,6 +19,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
   int _secondsRemaining = 1800; // 30 minutes
   Timer? _timer;
   bool _isInterviewActive = false;
+  final _aiService = AIService();
 
   final List<String> _questions = [
     'Tell us about yourself and your background in software development.',
@@ -60,12 +65,24 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
     }
   }
 
-  void _finishInterview() {
+  void _finishInterview() async {
     _timer?.cancel();
-    // Logic to navigate to evaluation screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Interview completed! Generating evaluation...')),
-    );
+    
+    final user = context.read<AuthProvider>().user;
+    if (user != null) {
+      await _aiService.saveInterviewSession(user.uid, {
+        'score': 85,
+        'durationSeconds': 1800 - _secondsRemaining,
+        'completedQuestions': _currentQuestionIndex + 1,
+      });
+    }
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const EvaluationResultScreen()),
+      );
+    }
   }
 
   String _formatTime(int seconds) {
