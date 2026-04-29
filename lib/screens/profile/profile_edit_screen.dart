@@ -1,7 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/profile_input_field.dart';
+import '../../services/storage_service.dart';
+import '../../services/user_service.dart';
+import '../../providers/auth_provider.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -15,6 +21,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late TextEditingController _nameController;
   late TextEditingController _bioController;
   bool _isSaving = false;
+  File? _imageFile;
+  final _picker = ImagePicker();
+  final _storageService = StorageService();
+  final _userService = UserService();
 
   @override
   void initState() {
@@ -30,11 +40,32 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => _imageFile = File(pickedFile.path));
+    }
+  }
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSaving = true);
-    await Future.delayed(const Duration(seconds: 1));
+    
+    final user = context.read<AuthProvider>().user;
+    if (user != null) {
+      String? photoUrl;
+      if (_imageFile != null) {
+        photoUrl = await _storageService.uploadProfileImage(user.uid, _imageFile!);
+      }
+
+      await _userService.saveUserProfile(user.copyWith(
+        displayName: _nameController.text,
+        bio: _bioController.text,
+        photoURL: photoUrl ?? user.photoURL,
+      ));
+    }
+
     if (mounted) {
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -69,8 +100,31 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppTheme.bgLight,
+                        backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
+                        child: _imageFile == null ? const Icon(Icons.person_rounded, size: 50, color: AppTheme.textSecondary) : null,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(color: AppTheme.primaryBlue, shape: BoxShape.circle),
+                          child: const Icon(Icons.camera_alt_rounded, size: 20, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
                 ProfileInputField(
                   label: 'Full Name',
                   controller: _nameController,
