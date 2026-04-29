@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
+import '../../services/ai_service.dart';
+import '../../providers/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AIChatbotScreen extends StatefulWidget {
   const AIChatbotScreen({super.key});
@@ -12,6 +16,7 @@ class AIChatbotScreen extends StatefulWidget {
 class _AIChatbotScreenState extends State<AIChatbotScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final _aiService = AIService();
   final List<Map<String, dynamic>> _messages = [
     {
       'isUser': false,
@@ -21,15 +26,16 @@ class _AIChatbotScreenState extends State<AIChatbotScreen> {
   ];
 
   void _sendMessage() {
-    if (_messageController.text.trim().isEmpty) return;
-    
-    setState(() {
-      _messages.add({
-        'isUser': true,
-        'text': _messageController.text.trim(),
-        'time': DateTime.now(),
-      });
-    });
+    final user = context.read<AuthProvider>().user;
+    final messageData = {
+      'isUser': true,
+      'text': _messageController.text.trim(),
+      'time': DateTime.now().toIso8601String(),
+    };
+
+    if (user != null) {
+      _aiService.saveChatMessage(user.uid, messageData);
+    }
     
     _messageController.clear();
     _scrollToBottom();
@@ -78,16 +84,42 @@ class _AIChatbotScreenState extends State<AIChatbotScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(20),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return _ChatBubble(
-                  text: message['text'],
-                  isUser: message['isUser'],
-                  time: message['time'],
+            child: Consumer<AuthProvider>(
+              builder: (context, auth, _) {
+                final user = auth.user;
+                if (user == null) return const Center(child: Text('Please login to chat'));
+
+                return StreamBuilder<QuerySnapshot>(
+                  stream: _aiService.getChatHistory(user.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    
+                    final docs = snapshot.data?.docs ?? [];
+                    if (docs.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No messages yet. Start a conversation!',
+                          style: GoogleFonts.inter(color: AppTheme.textSecondary),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(20),
+                      itemCount: docs.length,
+                      itemBuilder: (context, index) {
+                        final data = docs[index].data() as Map<String, dynamic>;
+                        return _ChatBubble(
+                          text: data['text'] ?? '',
+                          isUser: data['isUser'] ?? false,
+                          time: DateTime.now(), // Placeholder
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),
