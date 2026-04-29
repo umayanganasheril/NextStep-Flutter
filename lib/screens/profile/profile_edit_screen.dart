@@ -10,6 +10,23 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
+  late TextEditingController _nameController;
+  late TextEditingController _bioController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: 'Kanikalansooriya');
+    _bioController = TextEditingController(text: 'CS Student | Flutter Enthusiast');
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _bioController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
