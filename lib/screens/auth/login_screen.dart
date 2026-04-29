@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
+          MaterialPageRoute(builder: (_) => ProfileSetupScreen()),
           (route) => false,
         );
       }

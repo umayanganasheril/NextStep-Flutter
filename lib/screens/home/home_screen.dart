@@ -57,10 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final auth = context.watch<AuthProvider>();
     final internshipProvider = context.watch<InternshipProvider>();
     final user = auth.user;
-    final name = user?.name ?? 'Student';
+    final name = user?.displayName ?? 'Student';
     final firstName = name.split(' ').first;
-    final score = user?.calculateEvaluationScore() ?? 0.0;
-    final cvPercent = ((score / 10.0) * 100).round();
+    final cvPercent = user?.aiEvaluationScore ?? 0;
     final userSkills = user?.technicalSkills ?? [];
     final recommended = internshipProvider.getRecommended(userSkills);
 
@@ -133,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const MockInterviewScreen()),
+                        builder: (_) => MockInterviewScreen()),
                   ),
                 ),
               ],

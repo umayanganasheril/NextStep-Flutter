@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
+          MaterialPageRoute(builder: (_) => ProfileSetupScreen()),
         );
       }
     } else {
