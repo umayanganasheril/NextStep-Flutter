@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/profile_input_field.dart';
 import '../../services/storage_service.dart';
-import '../../services/profile_service.dart';
+import '../../services/user_service.dart';
 import '../../providers/auth_provider.dart';
 
 class ProfileEditScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   File? _imageFile;
   final _picker = ImagePicker();
   final _storageService = StorageService();
-  final _profileService = ProfileService();
+  final _userService = UserService();
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
 
     try {
-      await _profileService.updateProfile(updatedUser);
+      await _userService.saveUserProfile(updatedUser);
       auth.updateUser(updatedUser);
       
       if (mounted) {
