@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../core/theme/app_theme.dart';
+import '../../widgets/profile_input_field.dart';
+import '../../services/storage_service.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -14,6 +18,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late TextEditingController _nameController;
   late TextEditingController _bioController;
   bool _isSaving = false;
+  File? _imageFile;
+  final _picker = ImagePicker();
+  final _storageService = StorageService();
 
   @override
   void initState() {
@@ -29,15 +36,28 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => _imageFile = File(pickedFile.path));
+    }
+  }
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSaving = true);
+    
+    String? imageUrl;
+    if (_imageFile != null) {
+      imageUrl = await _storageService.uploadProfilePicture(_imageFile!, 'temp_uid');
+    }
+
     await Future.delayed(const Duration(seconds: 1)); // Simulate save
     if (mounted) {
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully')),
+        SnackBar(content: Text(imageUrl != null ? 'Profile updated with new photo' : 'Profile updated successfully')),
       );
     }
   }
@@ -68,8 +88,31 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                      backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
+                      child: _imageFile == null ? const Icon(Icons.person, size: 50, color: AppTheme.primaryBlue) : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(color: AppTheme.primaryBlue, shape: BoxShape.circle),
+                          child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
                 ProfileInputField(
                   label: 'Full Name',
                   controller: _nameController,
