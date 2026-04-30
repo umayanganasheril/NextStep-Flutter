@@ -5,8 +5,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/career_path_model.dart';
-import '../../services/ai_service.dart';
-import '../../models/user_model.dart';
 import 'cv_upload_screen.dart';
 class EvaluationResultScreen extends StatefulWidget {
   const EvaluationResultScreen({super.key});
@@ -233,7 +231,7 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                 if (bestMatch != null) ...[
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -255,7 +253,7 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                                  horizontal: 12, vertical: 5),
                               decoration: BoxDecoration(
                                 color: bestMatch
                                     .getMatchColor(userSkills)
@@ -273,7 +271,7 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 7),
                         Text(
                           'Best match: ${bestMatch.title}',
                           style: GoogleFonts.inter(
@@ -291,6 +289,8 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                     ),
                   ),
                 ],
+
+                // test commit changegit 
 
                 const SizedBox(height: 20),
 
