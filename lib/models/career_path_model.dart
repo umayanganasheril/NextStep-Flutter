@@ -136,4 +136,6 @@ class CareerPath {
         details:
             'Cybersecurity Analysts protect organizations from cyber threats. They monitor systems, analyze vulnerabilities, and implement security measures to safeguard data.',
       ),
-    
+    ];
+  }
+}

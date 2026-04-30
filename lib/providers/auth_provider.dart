@@ -38,7 +38,7 @@ class AuthProvider with ChangeNotifier {
           _isAuthenticated = true;
           _user = UserModel(
             uid: firebaseUser.uid,
-            name: 'Guest User',
+            displayName: 'Guest User',
             email: 'guest@nextstep.app',
             profileComplete: true,
             technicalSkills: ['Flutter', 'Python', 'JavaScript', 'React', 'SQL'],
@@ -58,7 +58,7 @@ class AuthProvider with ChangeNotifier {
             // Fallback if profile doesn't exist yet
             _user = UserModel(
               uid: firebaseUser.uid,
-              name: firebaseUser.displayName ?? 'User',
+              displayName: firebaseUser.displayName ?? 'User',
               email: firebaseUser.email ?? '',
             );
           }
@@ -112,7 +112,7 @@ class AuthProvider with ChangeNotifier {
         
         final newUser = UserModel(
           uid: cred.user!.uid,
-          name: name,
+          displayName: name,
           email: email,
         );
         
@@ -157,7 +157,7 @@ class AuthProvider with ChangeNotifier {
         } else {
           _user = UserModel(
             uid: cred.user!.uid,
-            name: cred.user!.displayName ?? 'User',
+            displayName: cred.user!.displayName ?? 'User',
             email: cred.user!.email ?? '',
           );
         }

@@ -6,7 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/auth_background.dart';
 import '../../widgets/logo_widget.dart';
 import '../navigation/main_navigation.dart';
-import '../profile/profile_setup_screen.dart';
+import 'profile_setup_screen.dart';
 import 'sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
+          MaterialPageRoute(builder: (_) => ProfileSetupScreen()),
           (route) => false,
         );
       }
