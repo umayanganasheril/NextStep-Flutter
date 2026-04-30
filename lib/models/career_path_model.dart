@@ -119,4 +119,21 @@ class CareerPath {
         details:
             'AI/ML Engineers develop artificial intelligence and machine learning models. They design algorithms that enable machines to learn from data and make predictions.',
       ),
-      
+      CareerPath(
+        id: '6',
+        title: 'Cybersecurity Analyst',
+        tagline: 'Defending the Digital World',
+        skills: [
+          'Network Security',
+          'Ethical Hacking',
+          'Linux',
+          'Python',
+          'SIEM',
+          'Cryptography'
+        ],
+        icon: Icons.security_outlined,
+        color: const Color(0xFFEF4444),
+        details:
+            'Cybersecurity Analysts protect organizations from cyber threats. They monitor systems, analyze vulnerabilities, and implement security measures to safeguard data.',
+      ),
+    
