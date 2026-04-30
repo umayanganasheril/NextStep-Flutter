@@ -174,7 +174,7 @@ class _CvUploadScreenState extends State<CvUploadScreen>
                       color: AppTheme.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 24.0),
 
                   // Current file info
                   if (hasCv)

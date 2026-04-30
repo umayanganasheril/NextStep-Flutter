@@ -355,6 +355,8 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                         const SizedBox(height: 16),
                       ],
 
+                      // Handles CV file selection, PDF text extraction, and AI analysis
+
                       if (user.aiSuggestions != null)
                         ...user.aiSuggestions!.map((sugg) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
