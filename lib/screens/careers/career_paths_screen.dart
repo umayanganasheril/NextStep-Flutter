@@ -535,7 +535,7 @@ class _CareerPathsScreenState extends State<CareerPathsScreen> {
                       Text(
                         career.details,
                         style: GoogleFonts.inter(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: AppTheme.textSecondary,
                           height: 1.5,
                         ),
