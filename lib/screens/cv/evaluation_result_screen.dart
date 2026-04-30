@@ -232,7 +232,7 @@ class _EvaluationResultScreenState extends State<EvaluationResultScreen>
                 if (bestMatch != null) ...[
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
